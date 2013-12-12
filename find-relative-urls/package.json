@@ -1,0 +1,17 @@
+{
+  "name": "find-relative-urls",
+  "version": "0.0.1",
+  "description": "Find relative URLs in webpages and their linked resources.",
+  "main": "find-relative-urls.js",
+  "dependencies": {
+    "cheerio": "~0.12.4",
+    "request": "~2.29.0",
+    "css-parse": "~1.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Atul Varma <varmaa@gmail.com>",
+  "license": "BSD"
+}
