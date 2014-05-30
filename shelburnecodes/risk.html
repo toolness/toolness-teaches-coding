@@ -1,0 +1,352 @@
+<!doctype html>
+<html>
+  <head>
+    
+    <meta charset="utf-8">
+    <script type="text/javascript" src="http://chancejs.com/chance.js"></script>
+    <title>My awesome game</title>
+    <style>
+       body {
+        font-family: sans-serif;
+        color:  #001A33;
+        background-color: #DDD;
+      }
+      
+      h1.risk{
+        font-family: "times new roman";
+      }
+      
+      h1 {
+        text-align: center;
+      }
+      
+      #wrapper > input {
+        width: 20%;
+        margin: 3px;
+      }
+      /*These are assorted positioning rules*/
+      #main {
+        width: 75%;
+        height: 500px;
+        float: right;
+      }
+      
+      #nav {
+        width: 19.96%;
+        height: 500px;
+        border: 2px solid;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        float: left;
+      }
+      
+      #wrapper, #new, #wrapper2 {
+        background-color: #EEE;
+        border: 1px solid;
+        height: 510px;
+      }
+      #wrapper {
+        text-align: center;
+      }
+      
+      button {
+        background-color: #000;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius:6px;
+      color: #fff;
+      font-family: 'oswald';
+      font-size: 20px;
+      text-decoration: none;
+      cursor: pointer;
+      border:none;
+        transition-duration: 1s;
+      }
+      
+      button:hover {
+        border: none;
+        background: #990000;
+        box-shadow: 0px 0px 1px #777;
+        animation-duration:1s;
+        -webkit-animation-duration:2s;
+      }
+      
+      /*This is for the main game.*/
+      input {
+        width: 100px;
+        border: 1px solid; 
+    -webkit-box-shadow: 
+      inset 0 0 8px  rgba(0,0,0,0.2),
+            0 0 16px rgba(0,0,0,0.1); 
+    -moz-box-shadow: 
+      inset 0 0 8px  rgba(0,0,0,0.2),
+            0 0 16px rgba(0,0,0,0.1); 
+    box-shadow: 
+      inset 0 0 8px  rgba(0,0,0,0.2),
+            0 0 16px rgba(0,0,0,0.1); 
+    background: rgba(0,0,200,0.2);
+      }
+      
+      input.bonds {
+        width: 50px;
+      }
+      
+      button.bonds {
+        width: 150px;
+      }
+      
+      .moreinfo {
+        font-size: 8pt;
+        color: #800000;
+        cursor: pointer;
+        animation-duration:2s;
+      }
+      
+      .moreinfo:hover {
+        color: red;
+        animation-duration:2s;
+      }
+      
+      #questionWrapper {
+        position: fixed;
+        color: white;
+        background-color: rgba(90, 00, 00, 0.9);
+        top: 150px;
+        left: 50%;
+        border: 1px solid;
+        border-radius: 5px;
+        display: none;
+        transition-duration: 2s;
+        padding: 5%;
+      }
+      
+      #questionWrapper.hack {
+        position: fixed;
+        top: 150px;
+        left: 15%;
+        width: 70%;
+        height: 500px;
+        display: inline;
+        transition-duration: 2s;
+        text-align: center;
+      }
+      
+      #questionWrapper > button {
+        color: black;
+        background-color: white;
+        transition-duration: 0.5s;
+      }
+      
+      #questionWrapper > button:hover {
+        background-color: black;
+        color: white;
+      }
+      
+      input[type=number] {
+        color: white;
+      }
+      
+      #econView {
+        position: fixed;
+        top: 200px;
+        background-color: rgba(175,0,0,0.5);
+        left: 70%;
+        width: 29%;
+        height: 150px;
+      }
+      
+      #teacher {
+        position: fixed;
+        float: left;
+        top: 25%;
+        left: 1%;
+      }
+    </style>
+    <script>
+      var canvas = document.getElementById("econView");
+      var ctx = canvas.getContext("2d");
+      function draw(gdp) {
+        //canvas functions go here!
+      }
+
+      var RR = [10, 10, 10, 10, 10, 10];
+      var DR = [10, 10, 10, 10, 10, 10];
+      var bonds = [100, 100, 100, 100, 100, 100];
+      var bondC = 0;
+      var GDP = [100, 100, 100, 100, 100, 100, 100];
+      var cPlayer = 0;
+      
+      function go(num) {
+        cPlayer = num;
+        question();
+        document.getElementById("RR").value = RR[num];
+        document.getElementById("DR").value = DR [num];
+        document.getElementById().innerHTML = "You presently have" + bonds[cPlayer] + "bonds";
+        alert(cPlayer);
+      }
+
+      function start() {
+        //this will be the array we pass to the addPlayers function
+        var players = ["me", "myself", "I"];
+        var x = 0;
+        var y = 1;
+        //this loop cycles through our array
+        for (var i = 0; i < 5; i++) {
+          //if something has been entered in it, this adds the contents of each input to our array.
+        var player = document.getElementById("p" + y).value;
+          if (player != null && player != "") {
+            players[x] = player;
+            x++;
+          }
+          y++;
+    }
+        //this displays our game panel and stops the display of our player entry panel.
+        document.getElementById("wrapper").style.display = "none";
+        document.getElementById("wrapper2").style.display = "inline";
+        for (var i = 0; i < players.length; i++) {
+          var num = i;
+        var player = players[i];
+          var html=document.getElementById("players").innerHTML;
+          document.getElementById("players").innerHTML=html+"<button onclick='go("+num+");'>"+player+"</button><br>";
+    }
+      }
+      
+      //This declares placeholder variables for our economy manager.
+      var interest = [6, 6, 6, 6, 6];
+      var GDPGrowth = [1, 1, 1, 1, 1];
+      var inCirc = [100, 100, 100, 100, 100];
+      
+      //this function decides how the economy would react to certain conditions.
+      function EconEngine() {
+        interest[cPlayer] = DR[cPlayer] + 2;
+        inCirc[cPlayer] = inCirc[cPlayer] + (20*bondC);
+      }
+      
+      
+      
+      function changeRR() {
+        RR[cPlayer] = document.getElementById("RR").value;
+      }
+      
+      function changeDR() {
+        DR[cPlayer] = number(document.getElementById("DR").value);
+      }
+      
+      function bondChange(query) {
+        if (query == "y") {
+          var num = document.getElementById("bBonds").value;
+          bonds[cPlayer] = bonds[cPlayer] + num;
+        }
+        else if (query == "n") {
+          var num = number(document.getElementById("sBonds").value);
+          bonds[cPlayer] = bonds[cPlayer] - num;
+        }
+        document.getElementById("bonds").innerHTML = "You presently have " + bonds[cPlayer] + " bonds.";
+      }
+      
+      
+      function moreInfo(info, concept) {
+        alert(info);
+      }
+      
+      
+      //This function presents the user with questions
+      function question() {
+        var yn = chance.bool();
+        if (yn == true) {
+          document.getElementById("questionWrapper").className = "hack";
+          document.getElementById("questionWrapper").innerHTML = "<h2>Draw a question</h2><label>Input question number</label><input type='number' id='qNum'><button onclick='answer();'>OK</button>";
+        }
+      }
+      var answers = ["In a command economy, everything is the property of the government, which determines production and in theory represents the people together. In a free market economy, things are the property of individuals respectively, and the government plays no role.", "Self evaluation", "Answer should indicate product and resource markets, taxes, and public goods and services. Players decide whether answer is correct or not.", "The amount of a good or service that producers are willing and able to sell and consumers to buy, respectively."];
+      
+      function answer() {
+        var qn = document.getElementById("qNum").value;
+        qn = qn-1;
+        document.getElementById("questionWrapper").innerHTML = "The correct answer was: " + answers[qn] + "<br><button onclick='goAway();'>Okay</button>";
+      }
+      
+      function goAway() {
+        document.getElementById("questionWrapper").className = "";
+      }
+      
+      function checkVars() {
+        alert(RR[1]);
+      }
+      
+      
+      
+      function teacher() {
+        document.getElementById("questionWrapper").className = "hack";
+        document.getElementById("questionWrapper").innerHTML = '<button onclick="showAns()">Answer key</button>';
+      }
+      
+      function showAns() {
+        alert("The function is triggered");
+        var htmlII = "";
+        var txt = "";
+        var questionNumber = 0;
+        for (var t=0; t<=answers.length; t++) {
+          alert("The loop starts fine.");
+          questionNumber = t+1;
+          txt = answers[questionNumber];
+          htmlII = htmlII + "<br>" + questionNumber + ". " + txt;
+        }
+        document.getElementById("questionWrapper").innerHTML = htmlII;
+      }
+    </script>
+  </head>
+  
+  <body onload="/start()">
+    
+    <iframe src="https://s3.amazonaws.com/s3.freepress.net/outreach/may15banner/may15banner.html" style="max-width: 100%; max-height: 90%;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0" width="800" height="175"></iframe>
+    
+  <h1 class="risk">RISK</h1>
+    <button onclick = "checkVars()">Test</button>
+    
+    <div id="wrapper" style="">
+      <br>
+      <p>Enter names of players</p>
+      <input id="p1"><input id="p2"><br><input id="p3"><input id="p4"><br><input id="p5"><br>
+      <button onclick="start()">Start</button>
+      
+      <button onclick="teacher()" id="teacher">I'm a teacher</button>
+    </div>
+    
+    
+    <div id="wrapper2" style="display: none;">
+      
+      <div id="nav">
+        <h2>Players</h2>
+        <hr>
+        <div id="players">
+        </div>
+      </div>
+      
+      <div id="main">
+        <h2>Policies</h2>
+        <canvas id="econView"></canvas>
+      <hr>
+    
+    
+      <h4>Financial regulation</h4>
+      <a class="moreinfo" onclick="moreInfo('RR stands for reserve requirement. This is the amount of savings that banks must keep in reserve. Changing it affects the ease of getting a loan.');">More information</a><br>
+      RR<input id="RR">
+      <button onclick="changeRR()">Change</button>
+      <br>
+    
+      <a class="moreinfo" onclick="moreInfo('DR stands for discount rate. This is the amount of interest that banks pay the fed. Changing it affects the interest banks charge individuals.');">More information</a><br>
+      DR<input id="DR">
+      <button onclick="changeDR()">Change</button>
+      <hr>
+    
+        <h4>Handle government bonds</h4><span id="bonds"></span><br><input class="bonds" id="bBonds"> <button class="bonds" onclick="bondChange('y')">Buy bonds</button><br><input class="bonds" id="sBonds"> <button class="bonds" onclick="bondChange('n')">Sell bonds</button>
+      <hr>
+      </div>
+      
+    </div>
+    
+    <div id="questionWrapper">
+    </div>
+  </body>
+</html>
