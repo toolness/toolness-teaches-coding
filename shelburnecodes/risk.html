@@ -163,8 +163,6 @@
       }
     </style>
     <script>
-      var canvas = document.getElementById("econView");
-      var ctx = canvas.getContext("2d");
       function draw(gdp) {
         //canvas functions go here!
       }
@@ -186,6 +184,9 @@
       }
 
       function start() {
+        canvas = document.getElementById("econView");
+        ctx = canvas.getContext("2d");
+
         //this will be the array we pass to the addPlayers function
         var players = ["me", "myself", "I"];
         var x = 0;
@@ -297,7 +298,7 @@
     </script>
   </head>
   
-  <body onload="/start()">
+  <body onload="start()">
     
     <iframe src="https://s3.amazonaws.com/s3.freepress.net/outreach/may15banner/may15banner.html" style="max-width: 100%; max-height: 90%;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0" width="800" height="175"></iframe>
     
